@@ -1,0 +1,1 @@
+27/10 : Création de la VM et installation des tools et dépendances
