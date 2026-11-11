@@ -5,3 +5,7 @@
 
 8/11  : Demande : Qu'est ce que c'est les rules ETO
         Gardé   : ETO rules sont des règles de détection pour suricata
+
+11/11 : Demande : Donnes moi un script python pour interpretation et creation de logs depuis suricata vers wireshark
+        Gardé   : Pas décidé
+        Rejeté  : Pas décidé
