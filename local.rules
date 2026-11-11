@@ -1,0 +1,6 @@
+# alert icmp any any -> any any (msg:"TEST ICMP detecte"; sid:1000001; rev:1;)
+
+alert icmp any any -> $HOME_NET any (msg:"LAB ICMP echo request"; itype:8; sid:1000010; rev:1;)
+alert tcp any any -> $HOME_NET 22 (msg:"LAB SSH brute force suspect"; flow:to_server; flags:S; threshold:type both, track by_src, count 5, seconds 30; sid:1000011; rev:2;)
+alert tcp any any -> $HOME_NET any (msg:"LAB scan de ports SYN"; flow:to_server; flags:S; threshold:type both, track by_src, count 20, seconds 10; sid:1000012; rev:2;)
+alert http any any -> any any (msg:"LAB User-Agent suspect"; http.user_agent; content:"BlackSun"; sid:1000013; rev:1;)

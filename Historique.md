@@ -15,3 +15,5 @@
 11/11 : création du lab et des réseaux pour l'attaquant et la cible, simulation d'entreprise et tunnel entre l'attaquant vers le NIDS puis la VM cible
 
 11/11 : tests d'intrusion et nmap sur la VM cible
+
+11/11 : modification des règles suricata
