@@ -68,3 +68,38 @@ sudo apt install -y openssh-server apache2
 sudo systemctl enable --now ssh apache2
 ```
 
+# Partie 2 : Réseau du lab
+Temps estimé : 45 minutes à 1 heure
+
+NIDS : repérer les interfaces 
+
+```bash
+ip -br a
+```
+
+IP statiques sur les interfaces du NIDS :
+(avec nmcli)
+
+```bash
+sudo nmcli con add type ethernet ifname enp7s0 con-name lab-att ipv4.method manual ipv4.addresses 192.168.100.1/24 ipv6.method disabled
+sudo nmcli con add type ethernet ifname enp8s0 con-name lab-cib ipv4.method manual ipv4.addresses 192.168.200.1/24 ipv6.method disabled
+sudo nmcli con mod lab-att ipv4.dad-timeout 0
+sudo nmcli con mod lab-cib ipv4.dad-timeout 0
+sudo nmcli con up lab-att
+sudo nmcli con up lab-cib
+```
+
+sinon, avec edit de fichiers de configuration réseau (exemple pour enp7s0) :
+
+```bash
+sudo nano /etc/network/interfaces
+```
+
+NIDS : activer le routage
+
+```bash
+echo 'net.ipv4.ip_forward=1' | sudo tee /etc/sysctl.d/99-forward.conf
+sudo sysctl --system
+cat /proc/sys/net/ipv4/ip_forward
+```
+
