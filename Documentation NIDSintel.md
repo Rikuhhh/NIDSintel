@@ -103,3 +103,47 @@ sudo sysctl --system
 cat /proc/sys/net/ipv4/ip_forward
 ```
 
+La commande doit afficher 1
+
+Attaquant : /etc/network/interfaces
+
+```
+allow-hotplug enp1s0
+iface enp1s0 inet dhcp
+
+auto enp7s0
+iface enp7s0 inet static
+    address 192.168.100.10/24
+    up ip route add 192.168.200.0/24 via 192.168.100.1
+```
+
+Pas de gateway sur enp7s0 car le NIDS est la gateway, ça entrerai en conflit avec le NAT, il faut utiliser un ip route
+
+Cible : /etc/network/interfaces
+
+```
+auto enp1s0
+iface enp1s0 inet static
+    address 192.168.200.20/24
+    gateway 192.168.200.1
+```
+
+gateway car le NIDS est la gateway pour la cible, pas de conflit avec le NAT car NAT indisponible sur la cible
+
+Appliquer sur l'attaquant et la cible
+
+```bash
+sudo systemctl restart networking
+ip -br a
+```
+
+Tests depuis l'attaquant
+
+
+```bash
+ping -c 3 192.168.100.1
+ping -c 3 192.168.200.1
+ping -c 3 192.168.200.20
+```
+
+Faire un snapshot des 3 VM
