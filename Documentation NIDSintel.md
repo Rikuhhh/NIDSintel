@@ -1,4 +1,4 @@
-Ceci est la documentation officielle de NIDSintel sur linux, un guide d'installation et de configuration qui permet d'avoir un laboratoire de test en utilisant la méthode NIDSintel qui est léger, configurable et portable.
+Ceci est la documentation officielle de NIDSintel sur linux, un guide d'installation et de configuration qui permet d'avoir un laboratoire de test en utilisant la méthode NIDSintel qui est léger, configurable et portable. 
 
 Temps total estimé : 5 à 8 heures
 # Partie 1 : Initialisation et installation
@@ -13,3 +13,9 @@ Cible : Debian 13 CLI seulement
 
 Ces choix sont totalement arbitraires, libre de choisir les machines cependant les commandes et configurations peuvent varier.
 
+Installation basique sur KVM
+création de deux connexions :
+connexion 1 : isolée dans un réseau 192.168.100.0/24 (réseau de l'attaquant)
+connexion 2 : isolée dans un réseau 192.168.200.0/24 (réseau de la cible)
+
+NAT activé sur toutes les machines pour l'instant.
