@@ -32,3 +32,9 @@ jq -r "$FILTRE | .alert.severity" "$LOG" | sort | uniq -c
 
 echo -e "\n=== 5 dernières alertes ==="
 jq -r "$FILTRE | \"\(.timestamp) \(.src_ip) -> \(.dest_ip) : \(.alert.signature)\"" "$LOG" | tail -5
+
+
+14/11 : Demande : Fait moi une partie de la doc qui est pour le dépannage
+        Gardé   : Partie dépannage
+        Rejeté  : Rien
+        Corrigé : Certaines commandes pas adaptées à mon lab, j'ai modifié les commandes pour qu'elles soient adaptées à mon lab et à mes VM

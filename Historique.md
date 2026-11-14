@@ -17,3 +17,5 @@
 11/11 : tests d'intrusion et nmap sur la VM cible
 
 11/11 : modification des règles suricata
+
+14/11 : Liaison alerte suricata avec wireshark pour voir les paquets de l'alerte

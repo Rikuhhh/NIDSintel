@@ -1,3 +1,11 @@
 donc tout d'abord, développer l'analyse
 puis donner à wazzouh pour accepter et display
 enfin les mettres en forme pour les analyser et remonter l'alerte
+
+Démonstration :  
+1. Présenter le schéma réseau  
+2. Vérifier Suricata : sudo systemctl status suricata  
+3. Sur le NIDS : sudo tail -f /var/log/suricata/eve.json | jq -c 'select(.event_type=="alert")'  
+4. Sur l'attaquant : nmap -sS 192.168.200.20, puis hydra ou curl  
+5. Montrer l'alerte, la notification et Wireshark  
+6. Lancer sudo ~/nids-resume.sh pour le bilan
