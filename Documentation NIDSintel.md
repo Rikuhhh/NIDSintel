@@ -1,6 +1,11 @@
 Ceci est la documentation officielle de NIDSintel sur linux, un guide d'installation et de configuration qui permet d'avoir un laboratoire de test en utilisant la méthode NIDSintel qui est léger, configurable et portable. 
 
 Temps total estimé : 5 à 8 heures
+
+## Caution :
+
+A la fin de chaque partie, faire des snapshots de chaque VM et poursuivre les tests nécessaires.
+
 # Partie 1 : Initialisation et installation
 Temps estimé : 1 à 2 heures
 
@@ -146,4 +151,81 @@ ping -c 3 192.168.200.1
 ping -c 3 192.168.200.20
 ```
 
-Faire un snapshot des 3 VM
+## Partie 3 : Installation et configuration de Suricata
+
+Temps estimé : 45 minutes à 1 heure
+
+Modifier /etc/suricata/suricata.yaml
+
+HOME_NET
+```yaml
+HOME_NET: "[192.168.100.0/24,192.168.200.0/24]" # permet de surveiller ces réseaux, le reste est considéré comme extérieur
+```
+
+Interfaces surveillées
+
+```yaml
+af-packet:
+  - interface: enp1s0
+  - interface: enp7s0
+```
+
+
+Community ID
+```yaml
+community-id: yes # gestion des identifiants
+```
+
+règles suricata à changer :
+
+```yaml
+rule-files:
+  - suricata.rules
+  - local.rules
+```
+
+Désactiver l'offloading car incompatible avec suricata sur les VMs
+
+/etc/systemd/system/ethtool-offload.service
+```
+[Unit]
+Description=Desactive l'offloading des cartes surveillees par Suricata
+After=network.target
+Before=suricata.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c 'for i in enp1s0 enp7s0; do /usr/sbin/ethtool -K $i gro off lro off tso off gso off rx off tx off || true; done'
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now ethtool-offload.service
+```
+
+Télécharger les règles
+```bash
+sudo suricata-update
+```
+
+Valider et démarrer
+```bash
+sudo suricata -T -c /etc/suricata/suricata.yaml -v
+sudo systemctl enable --now suricata
+sudo tail -f /var/log/suricata/suricata.log
+```
+Le test doit finir par "Configuration provided was successfully loaded" avec 0 rules fail
+
+Premier test
+
+```bash
+echo 'alert icmp any any -> any any (msg:"TEST ICMP detecte"; sid:1000001; rev:1;)' | sudo tee /var/lib/suricata/rules/local.rules
+sudo systemctl restart suricata
+ping -c 3 8.8.8.8
+sudo jq 'select(.event_type=="alert")' /var/log/suricata/eve.json | tail -30
+```
+
